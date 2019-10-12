@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstraction\IRepository.cs" />
+    <Compile Include="Concretes\HesapRepository.cs" />
     <Compile Include="Concretes\MusteriRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

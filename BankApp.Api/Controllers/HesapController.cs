@@ -16,15 +16,14 @@ namespace BankApp.Api.Controllers
         {
 
         }
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         // GET: api/Hesap/5
-        public string Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return "value";
+            var Hesap = business.HesapIdSec(id);
+            if (Hesap == null)
+                return NotFound();
+            return Ok(Hesap);
         }
 
         // POST: api/Hesap
@@ -40,13 +39,17 @@ namespace BankApp.Api.Controllers
         }
 
         // PUT: api/Hesap/5
-        public void Put(int id, [FromBody]string value)
+        public IHttpActionResult Post(int id)
         {
+            var Hesap = business.HesapIdSec(id);
+            if (Hesap == null)
+                return NotFound();
+            Hesap.Durum = false;
+            return Ok(Hesap);
+            
+            
         }
 
-        // DELETE: api/Hesap/5
-        public void Delete(int id)
-        {
-        }
+  
     }
 }

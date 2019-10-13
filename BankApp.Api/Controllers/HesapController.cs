@@ -41,13 +41,11 @@ namespace BankApp.Api.Controllers
         // PUT: api/Hesap/5
         public IHttpActionResult Post(int id)
         {
-            var Hesap = business.HesapIdSec(id);
+            var Hesap = business.HesapDurumGuncelle(id, false);
             if (Hesap == null)
                 return NotFound();
-            Hesap.Durum = false;
+            
             return Ok(Hesap);
-            
-            
         }
 
   

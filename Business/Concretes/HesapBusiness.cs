@@ -18,6 +18,25 @@ namespace Business.Concretes
         {
 
         }
+
+        public Hesap HesapDurumGuncelle(int hesapId,bool durum)
+        {
+            try
+            {
+                using(var repo= new HesapRepository())
+                {
+                    Hesap h = repo.IdSec(hesapId);
+                    if (repo.hesapIdGuncelle(h, durum))
+                        return h;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("HesapBusiness:HesapRepository:Güncelleme Hatası", ex);
+            }
+        }
+
         public Hesap HesapEkle(Hesap entity)
         {
             try

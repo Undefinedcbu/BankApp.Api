@@ -243,6 +243,62 @@ namespace DataAccessLayer.Concretes
             throw new NotImplementedException();
         }
 
+        public bool hesapIdGuncelle(Hesap entity,bool durum)
+        {
+            _rowsAffected = 0;
+
+
+            try
+            {
+                var query = new StringBuilder();
+                query.Append("UPDATE [dbo].[tblHesap] ");
+                query.Append("SET [Durum]=@Durum");
+                query.Append("WHERE ");
+                query.Append(" [HesapID] = @HesapID ");
+
+
+                var commandText = query.ToString();
+                query.Clear();
+
+                using (var dbConnection = _dbProviderFactory.CreateConnection())
+                {
+                    if (dbConnection == null)
+                        throw new ArgumentNullException("dbConnection", "The db connection can't be null.");
+
+                    dbConnection.ConnectionString = _connectionString;
+
+                    using (var dbCommand = _dbProviderFactory.CreateCommand())
+                    {
+                        if (dbCommand == null)
+                            throw new ArgumentNullException("dbCommand" + " The db Insert command for entity [tblHesap] can't be null. ");
+
+                        dbCommand.Connection = dbConnection;
+                        dbCommand.CommandText = commandText;
+
+                        DBHelper.AddParameter(dbCommand, "@HesapID", entity.HesapID);
+
+                        //Input Params
+              
+                        DBHelper.AddParameter(dbCommand, "@Durum", durum);
+
+
+                        //Open Connection
+                        if (dbConnection.State != ConnectionState.Open)
+                            dbConnection.Open();
+
+                        //Execute query
+                        _rowsAffected = dbCommand.ExecuteNonQuery();
+                    }
+                }
+                //Return the results of query/ies
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("HesapRepository:Güncelleme Hatası", ex);
+            }
+        }
+
         public bool IdSil(int id)
         {
             throw new NotImplementedException();

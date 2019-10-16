@@ -34,8 +34,8 @@ namespace BankApp.Api
 
             // config.MessageHandlers.Add(new KeyHandler());
             // config.Filters.Add(new APIAuthorizeAttribute());
-            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/octet-stream"));
-           
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+
 
         }
     }

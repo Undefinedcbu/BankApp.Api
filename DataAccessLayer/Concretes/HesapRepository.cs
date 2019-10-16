@@ -243,6 +243,82 @@ namespace DataAccessLayer.Concretes
             throw new NotImplementedException();
         }
 
+        public Hesap MusterIDSec(int MusteriID)
+        {
+            _rowsAffected = 0;
+
+            Hesap Hesap = null;
+
+            try
+            {
+                var query = new StringBuilder();
+                query.Append("SELECT ");
+                query.Append(" [Bakiye], [EkNo], [HesapNo], [Durum]");
+                query.Append("FROM [dbo].[tblHesap] ");
+                query.Append("WHERE ");
+                query.Append("[MusteriID] = @MusteriID ");
+
+
+                var commandText = query.ToString();
+                query.Clear();
+
+                using (var dbConnection = _dbProviderFactory.CreateConnection())
+                {
+                    if (dbConnection == null)
+                        throw new ArgumentNullException("dbConnection", "The db connection can't be null.");
+
+                    dbConnection.ConnectionString = _connectionString;
+
+                    using (var dbCommand = _dbProviderFactory.CreateCommand())
+                    {
+                        if (dbCommand == null)
+                            throw new ArgumentNullException(
+                                "dbCommand" + " The db SelectById command for entity [tblHesap] can't be null. ");
+
+                        dbCommand.Connection = dbConnection;
+                        dbCommand.CommandText = commandText;
+
+                        //Input Parameters
+                        DBHelper.AddParameter(dbCommand, "@id", MusteriID);
+
+                        //Open Connection
+                        if (dbConnection.State != ConnectionState.Open)
+                            dbConnection.Open();
+
+                        //Execute query.
+                        using (var reader = dbCommand.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    var entity = new Hesap();
+                                    entity.MusteriID = MusteriID;
+                                    entity.Bakiye = reader.GetDecimal(0);
+                                    entity.EkNo = reader.GetInt32(1);
+                                    entity.HesapNo = reader.GetInt32(2);
+                                    entity.Durum = reader.GetBoolean(3);
+
+
+
+                                    Hesap = entity;
+                                    break;
+                                }
+                            }
+                        }
+
+
+                    }
+                }
+
+                return Hesap;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("HesapRepository:ID ile Seçim Hatası", ex);
+            }
+        }
         public bool hesapIdGuncelle(Hesap entity,bool durum)
         {
             _rowsAffected = 0;

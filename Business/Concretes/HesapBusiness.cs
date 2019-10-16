@@ -54,6 +54,24 @@ namespace Business.Concretes
                 throw new Exception("HesapBusiness:HesapRepository:Ekleme Hatası", ex);
             }
         }
+
+        public Hesap HesapGoruntule(int musteriID)
+        {
+            try
+            {
+                using (var repo = new HesapRepository())
+                {
+                    var entity = repo.MusterIDSec(musteriID);
+                    if (entity != null)
+                        return entity;
+                }
+                return null;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("HesapBusiness:HesapRespository:Goruntuleme Hatası", ex);
+            }
+        }
         public Hesap HesapGuncelle(Hesap entity)
         {
             try

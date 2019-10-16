@@ -323,6 +323,88 @@ namespace BankApp.Concretes
             }
         }
 
+        public Musteri TCSec(string TCKN)
+        {
+
+            _rowsAffected = 0;
+
+            Musteri Musteri = null;
+
+            try
+            {
+                var query = new StringBuilder();
+                query.Append("SELECT ");
+                query.Append("[MusteriID],[TCKimlik],[Ad] ,[Soyad],[DogumTarihi],[Adres],[Telefon],[Email],[Parola],[Anahtar]");
+                query.Append("FROM [dbo].[tblMusteri] ");
+                query.Append("WHERE ");
+                query.Append("[MusteriID] = @id ");
+
+
+                var commandText = query.ToString();
+                query.Clear();
+
+                using (var dbConnection = _dbProviderFactory.CreateConnection())
+                {
+                    if (dbConnection == null)
+                        throw new ArgumentNullException("dbConnection", "The db connection can't be null.");
+
+                    dbConnection.ConnectionString = _connectionString;
+
+                    using (var dbCommand = _dbProviderFactory.CreateCommand())
+                    {
+                        if (dbCommand == null)
+                            throw new ArgumentNullException(
+                                "dbCommand" + " The db SelectById command for entity [tblMusteri] can't be null. ");
+
+                        dbCommand.Connection = dbConnection;
+                        dbCommand.CommandText = commandText;
+
+                        //Input Parameters
+                        DBHelper.AddParameter(dbCommand, "@id", TCKN);
+
+                        //Open Connection
+                        if (dbConnection.State != ConnectionState.Open)
+                            dbConnection.Open();
+
+                        //Execute query.
+                        using (var reader = dbCommand.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    var entity = new Musteri();
+                                    entity.MusteriID = reader.GetInt32(0);
+                                    entity.TcKimlik = reader.GetString(1);
+                                    entity.Ad = reader.GetString(2);
+                                    entity.Soyad = reader.GetString(3);
+                                    entity.DogumTarihi = reader.GetDateTime(4).Date;
+                                    entity.Adres = reader.GetString(5);
+                                    entity.Telefon = reader.GetString(6);
+                                    entity.Email = reader.GetString(7);
+                                    entity.Parola = reader.GetString(8);
+
+
+
+                                    Musteri = entity;
+                                    break;
+                                }
+                            }
+                        }
+
+
+                    }
+                }
+
+                return Musteri;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("MusteriRepository:ID ile Seçim Hatası", ex);
+            }
+        }
+
 
         public Musteri MusteriAdSec(string MusteriAdi)
         {

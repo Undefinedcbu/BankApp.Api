@@ -20,12 +20,11 @@ namespace BankApp.Api.Controllers
         // GET: api/Hesap/5
         public IHttpActionResult Get(int id)
         {
-            var Hesap = business.HesapIdSec(id);
+            var Hesap = business.HesapGoruntule(id);
             if (Hesap == null)
                 return NotFound();
             return Ok(Hesap);
         }
-
         // POST: api/Hesap
         public IHttpActionResult Post([FromBody]Hesap Hesap)
         {

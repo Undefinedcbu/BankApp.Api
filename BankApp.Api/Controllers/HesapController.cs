@@ -18,6 +18,7 @@ namespace BankApp.Api.Controllers
         }
 
         // GET: api/Hesap/5
+        [Route("api/Hesap")]
         public IHttpActionResult Get(int id)
         {
             var Hesap = business.HesapGoruntule(id);
@@ -25,13 +26,16 @@ namespace BankApp.Api.Controllers
                 return NotFound();
             return Ok(Hesap);
         }
+
         // POST: api/Hesap
-        public IHttpActionResult Post([FromBody]Hesap Hesap)
+        [HttpPost]
+        [Route("api/Hesap")]
+        public IHttpActionResult Post(int id, [FromBody]Hesap Hesap)
         {
             if (ModelState.IsValid)
             {
-                var olusturulanHesap = business.HesapEkle(Hesap);
-                return CreatedAtRoute("DefaultApi", new { id = olusturulanHesap.HesapID }, olusturulanHesap);
+                var olusturulanHesap = business.HesapEkle(Hesap,id);
+                return Ok(olusturulanHesap);
             }
             return BadRequest();
 

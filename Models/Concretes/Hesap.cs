@@ -10,7 +10,7 @@ namespace Models.Concretes
         public int MusteriID { get; set; }
         public decimal Bakiye { get; set; }
         public int EkNo { get; set; }
-        public double HesapNo { get; set; }
+        public string HesapNo { get; set; }
         public bool Durum { get; set; }
     }
 }

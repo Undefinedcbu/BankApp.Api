@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Concretes
 {
-    public class HesapRepository : IRepository<Hesap>, IDisposable
+    public class HesapRepository : IDisposable
     {
         private string _connectionString;
         private string _dbProviderName;
@@ -45,7 +45,7 @@ namespace DataAccessLayer.Concretes
             _dbProviderFactory = DbProviderFactories.GetFactory(_dbProviderName);
         }
 
-        public bool Ekle(Hesap entity)
+        public bool Ekle(Hesap entity,int MusteriID,string HesapNo)
         {
             _rowsAffected = 0;
 
@@ -53,7 +53,7 @@ namespace DataAccessLayer.Concretes
             {
                 var query = new StringBuilder();
                 query.Append("INSERT INTO [dbo].[tblHesap] ");
-                query.Append(" ([MusteriID],[Bakiye],[EkNo],[HesapNo],[Durum])");
+                query.Append(" ([MusteriID],[Bakiye],[HesapNo],[Durum])");
                 query.Append("VALUES ");
                 query.Append(
                     "( @MusteriID, @Bakiye, @EkNo, @HesapNo, @Durum ) ");
@@ -78,11 +78,11 @@ namespace DataAccessLayer.Concretes
                         dbCommand.CommandText = commandText;
 
                         //Input Params
-                        DBHelper.AddParameter(dbCommand, "@MusteriID", entity.MusteriID);
+                        DBHelper.AddParameter(dbCommand, "@MusteriID", MusteriID);
                         DBHelper.AddParameter(dbCommand, "@Bakiye", entity.Bakiye);
-                        DBHelper.AddParameter(dbCommand, "@EkNo", entity.EkNo);
-                        DBHelper.AddParameter(dbCommand, "@HesapNo", entity.HesapNo);
-                        DBHelper.AddParameter(dbCommand, "@Durum", entity.Durum);
+               
+                        DBHelper.AddParameter(dbCommand, "@HesapNo", HesapNo);
+                        DBHelper.AddParameter(dbCommand, "@Durum", true);
 
                         //Open Connection
                         if (dbConnection.State != ConnectionState.Open)
@@ -110,7 +110,7 @@ namespace DataAccessLayer.Concretes
             {
                 var query = new StringBuilder();
                 query.Append("UPDATE [dbo].[tblHesap] ");
-                query.Append("SET [MusteriID] = @MusteriID, [Bakiye] = @Bakiye, [EkNo]=@EkNo, [HesapNo]=@HesapNo, [Durum]=@Durum");
+                query.Append("SET [Bakiye] = @Bakiye, [HesapNo]=@HesapNo, [Durum]=@Durum");
                 query.Append("WHERE ");
                 query.Append(" [HesapID] = @HesapID ");
 
@@ -138,7 +138,7 @@ namespace DataAccessLayer.Concretes
                         //Input Params
                         DBHelper.AddParameter(dbCommand, "@MusteriID", entity.MusteriID);
                         DBHelper.AddParameter(dbCommand, "@Bakiye", entity.Bakiye);
-                        DBHelper.AddParameter(dbCommand, "@EkNo", entity.EkNo);
+             
                         DBHelper.AddParameter(dbCommand, "@HesapNo", entity.HesapNo);
                         DBHelper.AddParameter(dbCommand, "@Durum", entity.Durum);
 
@@ -171,7 +171,7 @@ namespace DataAccessLayer.Concretes
             {
                 var query = new StringBuilder();
                 query.Append("SELECT ");
-                query.Append("[MusteriID], [Bakiye], [EkNo], [HesapNo], [Durum]");
+                query.Append("[MusteriID], [Bakiye],  [HesapNo], [Durum]");
                 query.Append("FROM [dbo].[tblHesap] ");
                 query.Append("WHERE ");
                 query.Append("[HesapID] = @id ");
@@ -213,9 +213,9 @@ namespace DataAccessLayer.Concretes
                                     var entity = new Hesap();
                                     entity.MusteriID = reader.GetInt32(0);
                                     entity.Bakiye = reader.GetDecimal(1);
-                                    entity.EkNo = reader.GetInt32(2);
-                                    entity.HesapNo = reader.GetInt32(3);
-                                    entity.Durum = reader.GetBoolean(4);
+                                    
+                                    entity.HesapNo = reader.GetString(2);
+                                    entity.Durum = reader.GetBoolean(3);
 
 
 
@@ -253,7 +253,7 @@ namespace DataAccessLayer.Concretes
             {
                 var query = new StringBuilder();
                 query.Append("SELECT ");
-                query.Append(" [Bakiye], [EkNo], [HesapNo], [Durum]");
+                query.Append(" [Bakiye],  [HesapNo], [Durum]");
                 query.Append("FROM [dbo].[tblHesap] ");
                 query.Append("WHERE ");
                 query.Append("[MusteriID] = @MusteriID ");
@@ -279,7 +279,7 @@ namespace DataAccessLayer.Concretes
                         dbCommand.CommandText = commandText;
 
                         //Input Parameters
-                        DBHelper.AddParameter(dbCommand, "@id", MusteriID);
+                        DBHelper.AddParameter(dbCommand, "@MusteriID", MusteriID);
 
                         //Open Connection
                         if (dbConnection.State != ConnectionState.Open)
@@ -295,9 +295,9 @@ namespace DataAccessLayer.Concretes
                                     var entity = new Hesap();
                                     entity.MusteriID = MusteriID;
                                     entity.Bakiye = reader.GetDecimal(0);
-                                    entity.EkNo = reader.GetInt32(1);
-                                    entity.HesapNo = reader.GetInt32(2);
-                                    entity.Durum = reader.GetBoolean(3);
+                        
+                                    entity.HesapNo = reader.GetString(1);
+                                    entity.Durum = reader.GetBoolean(2);
 
 
 

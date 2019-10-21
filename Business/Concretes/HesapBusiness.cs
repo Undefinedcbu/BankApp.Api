@@ -37,13 +37,15 @@ namespace Business.Concretes
             }
         }
 
-        public Hesap HesapEkle(Hesap entity)
+        public Hesap HesapEkle(Hesap entity,int MusteriID)
         {
+
+            string hesap = MusteriID.ToString() + "00";
             try
             {
                 using (var repo = new HesapRepository())
                 {
-                    if (repo.Ekle(entity))
+                    if (repo.Ekle(entity,MusteriID,hesap))
                         return entity;
                 }
 
@@ -59,13 +61,13 @@ namespace Business.Concretes
         {
             try
             {
+                Hesap responseEntitiy = null;
                 using (var repo = new HesapRepository())
                 {
-                    var entity = repo.MusterIDSec(musteriID);
-                    if (entity != null)
-                        return entity;
+                    responseEntitiy = repo.MusterIDSec(musteriID);
+
                 }
-                return null;
+                return responseEntitiy;
             }
             catch(Exception ex)
             {

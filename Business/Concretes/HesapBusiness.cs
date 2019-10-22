@@ -107,5 +107,31 @@ namespace Business.Concretes
                 throw new Exception("HesapBusiness:HesapRepository:Seçme Hatası", ex);
             }
         }
+
+        public bool Transfer(string GonderenHesapNo, string AlanHesapNo, decimal Miktar)
+        {
+            try
+            {
+                Hesap GonderenHesap = null;
+                Hesap AlanHesap = null;
+                using (var repo = new HesapRepository())
+                {
+                    GonderenHesap = repo.HesapNoSec(GonderenHesapNo);
+                    if (GonderenHesap.Bakiye >= Miktar)
+                    {
+                        AlanHesap = repo.HesapNoSec(AlanHesapNo);
+                        repo.HesapBakiyeGuncelle(GonderenHesap, GonderenHesap.Bakiye - Miktar);
+                        repo.HesapBakiyeGuncelle(AlanHesap, AlanHesap.Bakiye + Miktar);
+                        return true;
+                    }
+                    return false;
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("HesapBusiness:HesapRepository:Seçme Hatası", ex);
+            }
+        }
     }
 }

@@ -172,6 +172,7 @@
     <Compile Include="Controllers\HesapController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MusteriController.cs" />
+    <Compile Include="Controllers\TransferController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

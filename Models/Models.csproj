@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Concretes\Hesap.cs" />
     <Compile Include="Concretes\Musteri.cs" />
+    <Compile Include="Concretes\Odeme.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

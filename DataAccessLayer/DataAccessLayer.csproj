@@ -50,6 +50,8 @@
     <Compile Include="Abstraction\IRepository.cs" />
     <Compile Include="Concretes\HesapRepository.cs" />
     <Compile Include="Concretes\MusteriRepository.cs" />
+    <Compile Include="Concretes\OdemeRepository.cs" />
+    <Compile Include="MusteriBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

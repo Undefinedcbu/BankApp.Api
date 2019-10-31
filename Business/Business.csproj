@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Concretes\HesapBusiness.cs" />
     <Compile Include="Concretes\MusteriBusiness.cs" />
+    <Compile Include="Concretes\OdemeBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

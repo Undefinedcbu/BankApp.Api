@@ -50,7 +50,7 @@ namespace Business.Concretes
                     {
                         h.Bakiye = h.Bakiye - o.Borc;
                         o.Borc = 0;
-                        repo.BorcOde(o, 0);
+                        repo.BorcOde(o);
                         repo2.HesapBakiyeGuncelle(h, h.Bakiye);
                         return true;
                     }

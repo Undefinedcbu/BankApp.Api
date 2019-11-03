@@ -30,7 +30,7 @@ namespace BankApp.Api.Controllers
         // POST: api/Hesap
         [HttpPost]
         [Route("api/Hesap")]
-        public IHttpActionResult Post(int id, [FromBody]Hesap Hesap)
+        public IHttpActionResult Ekle(int id, [FromBody]Hesap Hesap)
         {
             if (ModelState.IsValid)
             {
@@ -42,7 +42,9 @@ namespace BankApp.Api.Controllers
         }
 
         // PUT: api/Hesap/5
-        public IHttpActionResult Post(int id)
+        [HttpPost]
+        
+        public IHttpActionResult Kapat(int id)
         {
             var Hesap = business.HesapDurumGuncelle(id, false);
             if (Hesap == null)

@@ -173,8 +173,7 @@ namespace BankApp.Concretes
 
             IList<Musteri> Musterilar = new List<Musteri>();
 
-            // try
-            // {
+            
             var query = new StringBuilder();
             query.Append("SELECT ");
             query.Append("[MusteriID],[TCKimlik],[Ad] ,[Soyad],[DogumTarihi],[Adres],[Telefon],[Email],[Parola],[Anahtar]");
@@ -232,13 +231,9 @@ namespace BankApp.Concretes
 
                 }
             }
-            // Return list
+       
             return Musterilar;
-            //  }
-            //catch (Exception ex)
-            //{
-            //      throw new Exception("MusteriRepository:Hepsini Seçim Hatası", ex);
-            //}
+           
         }
 
         public Musteri IdSec(int id)

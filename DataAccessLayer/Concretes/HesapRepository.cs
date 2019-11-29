@@ -56,7 +56,7 @@ namespace DataAccessLayer.Concretes
                 query.Append(" ([MusteriID],[Bakiye],[HesapNo],[Durum])");
                 query.Append("VALUES ");
                 query.Append(
-                    "( @MusteriID, @Bakiye, @EkNo, @HesapNo, @Durum ) ");
+                    "( @MusteriID, @Bakiye, @HesapNo, @Durum ) ");
 
 
                 var commandText = query.ToString();
@@ -80,9 +80,8 @@ namespace DataAccessLayer.Concretes
                         //Input Params
                         DBHelper.AddParameter(dbCommand, "@MusteriID", MusteriID);
                         DBHelper.AddParameter(dbCommand, "@Bakiye", entity.Bakiye);
-
                         DBHelper.AddParameter(dbCommand, "@HesapNo", HesapNo);
-                        DBHelper.AddParameter(dbCommand, "@Durum", true);
+                        DBHelper.AddParameter(dbCommand, "@Durum", "Açık");
 
                         //Open Connection
                         if (dbConnection.State != ConnectionState.Open)
@@ -215,7 +214,7 @@ namespace DataAccessLayer.Concretes
                                     entity.Bakiye = reader.GetDecimal(1);
 
                                     entity.HesapNo = reader.GetString(2);
-                                    entity.Durum = reader.GetBoolean(3);
+                                    entity.Durum = reader.GetString(3);
 
 
 
@@ -238,9 +237,150 @@ namespace DataAccessLayer.Concretes
             }
         }
 
-        public IList<Hesap> HepsiniSec()
+        public IList<Hesap> HepsiniSec(int id)
         {
-            throw new NotImplementedException();
+            _rowsAffected = 0;
+
+            IList<Hesap> Hesaplar = new List<Hesap>();
+            try
+            {
+                var query = new StringBuilder();
+                query.Append("SELECT ");
+                query.Append("[MusteriID], [Bakiye],  [HesapNo], [Durum],[HesapID]");
+                query.Append("FROM [dbo].[tblHesap] ");
+                query.Append("WHERE ");
+                query.Append("[MusteriID] = @MusteriID ");
+
+
+                var commandText = query.ToString();
+                query.Clear();
+
+                using (var dbConnection = _dbProviderFactory.CreateConnection())
+                {
+                    if (dbConnection == null)
+                        throw new ArgumentNullException("dbConnection", "The db connection can't be null.");
+
+                    dbConnection.ConnectionString = _connectionString;
+
+                    using (var dbCommand = _dbProviderFactory.CreateCommand())
+                    {
+                        if (dbCommand == null)
+                            throw new ArgumentNullException(
+                                "dbCommand" + " The db SelectById command for entity [tblHesap] can't be null. ");
+
+                        dbCommand.Connection = dbConnection;
+                        dbCommand.CommandText = commandText;
+
+                        //Input Parameters
+                        DBHelper.AddParameter(dbCommand, "@MusteriID", id);
+
+                        //Open Connection
+                        if (dbConnection.State != ConnectionState.Open)
+                            dbConnection.Open();
+
+                        //Execute query.
+                        using (var reader = dbCommand.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    var entity = new Hesap();
+                                    entity.MusteriID = reader.GetInt32(0);
+                                    entity.Bakiye = reader.GetDecimal(1);
+                                    entity.HesapNo = reader.GetString(2);
+                                    entity.Durum = reader.GetString(3);
+                                    entity.HesapID = reader.GetInt32(4);
+                                    
+                                    Hesaplar.Add(entity);
+                                
+                                }
+                            }
+                        }
+
+
+                    }
+                }
+
+                return Hesaplar;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("HesapRepository:ID ile Seçim Hatası", ex);
+            }
+        }
+
+        public IList<Hesap> TumHesaplar()
+        {
+            _rowsAffected = 0;
+
+            IList<Hesap> Hesaplar = new List<Hesap>();
+            try
+            {
+                var query = new StringBuilder();
+                query.Append("SELECT ");
+                query.Append("[MusteriID], [Bakiye],  [HesapNo], [Durum],[HesapID]");
+                query.Append("FROM [dbo].[tblHesap] ");
+  
+
+
+                var commandText = query.ToString();
+                query.Clear();
+
+                using (var dbConnection = _dbProviderFactory.CreateConnection())
+                {
+                    if (dbConnection == null)
+                        throw new ArgumentNullException("dbConnection", "The db connection can't be null.");
+
+                    dbConnection.ConnectionString = _connectionString;
+
+                    using (var dbCommand = _dbProviderFactory.CreateCommand())
+                    {
+                        if (dbCommand == null)
+                            throw new ArgumentNullException(
+                                "dbCommand" + " The db SelectById command for entity [tblHesap] can't be null. ");
+
+                        dbCommand.Connection = dbConnection;
+                        dbCommand.CommandText = commandText;
+
+          
+
+                        //Open Connection
+                        if (dbConnection.State != ConnectionState.Open)
+                            dbConnection.Open();
+
+                        //Execute query.
+                        using (var reader = dbCommand.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    var entity = new Hesap();
+                                    entity.MusteriID = reader.GetInt32(0);
+                                    entity.Bakiye = reader.GetDecimal(1);
+                                    entity.HesapNo = reader.GetString(2);
+                                    entity.Durum = reader.GetString(3);
+                                    entity.HesapID = reader.GetInt32(4);
+
+                                    Hesaplar.Add(entity);
+
+                                }
+                            }
+                        }
+
+
+                    }
+                }
+
+                return Hesaplar;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("HesapRepository:ID ile Seçim Hatası", ex);
+            }
         }
 
         public Hesap MusterIDSec(int MusteriID)
@@ -297,7 +437,7 @@ namespace DataAccessLayer.Concretes
                                     entity.Bakiye = reader.GetDecimal(0);
 
                                     entity.HesapNo = reader.GetString(1);
-                                    entity.Durum = reader.GetBoolean(2);
+                                    entity.Durum = reader.GetString(2);
 
 
 
@@ -319,7 +459,7 @@ namespace DataAccessLayer.Concretes
                 throw new Exception("HesapRepository:ID ile Seçim Hatası", ex);
             }
         }
-        public bool hesapIdGuncelle(Hesap entity, bool durum)
+        public bool hesapIdGuncelle(int HesapID, string durum)
         {
             _rowsAffected = 0;
 
@@ -328,9 +468,9 @@ namespace DataAccessLayer.Concretes
             {
                 var query = new StringBuilder();
                 query.Append("UPDATE [dbo].[tblHesap] ");
-                query.Append("SET [Durum]=@Durum");
+                query.Append("SET [Durum] = @Durum ");
                 query.Append("WHERE ");
-                query.Append(" [HesapID] = @HesapID ");
+                query.Append("[HesapID] = @HesapID ");
 
 
                 var commandText = query.ToString();
@@ -351,7 +491,7 @@ namespace DataAccessLayer.Concretes
                         dbCommand.Connection = dbConnection;
                         dbCommand.CommandText = commandText;
 
-                        DBHelper.AddParameter(dbCommand, "@HesapID", entity.HesapID);
+                        DBHelper.AddParameter(dbCommand, "@HesapID", HesapID);
 
                         //Input Params
 
@@ -377,20 +517,66 @@ namespace DataAccessLayer.Concretes
 
         public bool IdSil(int id)
         {
-            throw new NotImplementedException();
-        }
-        public bool HesapBakiyeGuncelle(Hesap entity, string HesapNo, decimal miktar)
-        {
             _rowsAffected = 0;
 
+            try
+            {
+                var query = new StringBuilder();
+                query.Append("DELETE ");
+                query.Append("FROM [dbo].[tbLHesap] ");
+                query.Append("WHERE ");
+                query.Append("[HesapID] = @id ");
+
+
+                var commandText = query.ToString();
+                query.Clear();
+
+                using (var dbConnection = _dbProviderFactory.CreateConnection())
+                {
+                    if (dbConnection == null)
+                        throw new ArgumentNullException("dbConnection", "The db connection can't be null.");
+
+                    dbConnection.ConnectionString = _connectionString;
+
+                    using (var dbCommand = _dbProviderFactory.CreateCommand())
+                    {
+                        if (dbCommand == null)
+                            throw new ArgumentNullException(
+                                "dbCommand" + " The db SelectById command for entity [tblMusteri] can't be null. ");
+
+                        dbCommand.Connection = dbConnection;
+                        dbCommand.CommandText = commandText;
+
+                        //Input Parameters
+                        DBHelper.AddParameter(dbCommand, "@id", id);
+
+                        //Open Connection
+                        if (dbConnection.State != ConnectionState.Open)
+                            dbConnection.Open();
+                        //Execute query
+                        _rowsAffected = dbCommand.ExecuteNonQuery();
+
+                    }
+                }
+                //Return the results of query/ies
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("MusteriRepository:Silme Hatası", ex);
+            }
+        }
+        public bool HesapNoBakiyeGuncelle(string HesapNo, decimal Bakiye)
+        {
+            _rowsAffected = 0;
 
             try
             {
                 var query = new StringBuilder();
                 query.Append("UPDATE [dbo].[tblHesap] ");
-                query.Append("SET [Bakiye] = @Bakiye");
+                query.Append("SET [Bakiye] = @Bakiye ");
                 query.Append("WHERE ");
-                query.Append(" [HesapNo] = @HesapNo ");
+                query.Append("[HesapNo] = @HesapNo ");
 
 
                 var commandText = query.ToString();
@@ -414,8 +600,7 @@ namespace DataAccessLayer.Concretes
                         DBHelper.AddParameter(dbCommand, "@HesapNo", HesapNo);
 
                         //Input Params
-                        DBHelper.AddParameter(dbCommand, "@MusteriID", entity.MusteriID);
-                        DBHelper.AddParameter(dbCommand, "@Bakiye", entity.Bakiye);
+                        DBHelper.AddParameter(dbCommand, "@Bakiye", Bakiye);
 
                         //Open Connection
                         if (dbConnection.State != ConnectionState.Open)
@@ -434,7 +619,7 @@ namespace DataAccessLayer.Concretes
             }
         }
 
-        public bool HesapBakiyeGuncelle(Hesap entity,decimal bakiye)
+        public bool HesapBakiyeGuncelle(int HesapID, decimal bakiye)
         {
             _rowsAffected = 0;
 
@@ -443,9 +628,9 @@ namespace DataAccessLayer.Concretes
             {
                 var query = new StringBuilder();
                 query.Append("UPDATE [dbo].[tblHesap] ");
-                query.Append("SET [Bakiye] = @Bakiye");
+                query.Append("SET [Bakiye] = @Bakiye ");
                 query.Append("WHERE ");
-                query.Append(" [HesapID] = @HesapID ");
+                query.Append("[HesapID] = @HesapID ");
 
 
                 var commandText = query.ToString();
@@ -466,10 +651,10 @@ namespace DataAccessLayer.Concretes
                         dbCommand.Connection = dbConnection;
                         dbCommand.CommandText = commandText;
 
-                        DBHelper.AddParameter(dbCommand, "@HesapID", entity.HesapID);
+                        DBHelper.AddParameter(dbCommand, "@HesapID", HesapID);
 
                         //Input Params
-                        DBHelper.AddParameter(dbCommand, "@MusteriID", entity.MusteriID);
+                       
                         DBHelper.AddParameter(dbCommand, "@Bakiye", bakiye);
 
                         //Open Connection
@@ -499,7 +684,7 @@ namespace DataAccessLayer.Concretes
             {
                 var query = new StringBuilder();
                 query.Append("SELECT ");
-                query.Append("[MusteriID], [Bakiye],  [HesapNo], [Durum]");
+                query.Append("[MusteriID], [Bakiye],  [HesapNo], [Durum],[HesapID]");
                 query.Append("FROM [dbo].[tblHesap] ");
                 query.Append("WHERE ");
                 query.Append("[HesapNo] = @HesapNo ");
@@ -543,7 +728,8 @@ namespace DataAccessLayer.Concretes
                                     entity.Bakiye = reader.GetDecimal(1);
 
                                     entity.HesapNo = reader.GetString(2);
-                                    entity.Durum = reader.GetBoolean(3);
+                                    entity.Durum = reader.GetString(3);
+                                    entity.HesapID = reader.GetInt32(4);
 
 
 

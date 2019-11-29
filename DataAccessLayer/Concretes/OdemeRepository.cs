@@ -42,7 +42,7 @@ namespace DataAccessLayer.Concretes
             _dbProviderName = DBHelper.GetConnectionProvider();
             _dbProviderFactory = DbProviderFactories.GetFactory(_dbProviderName);
         }
-        public Odeme AboneNoSec(string aboneNo)
+        public Odeme AboneNoSec(int aboneNo)
         {
             _rowsAffected = 0;
 
@@ -52,10 +52,10 @@ namespace DataAccessLayer.Concretes
             {
                 var query = new StringBuilder();
                 query.Append("SELECT ");
-                query.Append("[Borc]");
+                query.Append("[Borc],[AboneNo],[MusteriID] ");
                 query.Append("FROM [dbo].[tblOdeme] ");
                 query.Append("WHERE ");
-                query.Append("[AboneNo] = @aboneNo ");
+                query.Append("[AboneNo] = @AboneNo ");
 
 
                 var commandText = query.ToString();
@@ -78,7 +78,7 @@ namespace DataAccessLayer.Concretes
                         dbCommand.CommandText = commandText;
 
                         //Input Parameters
-                        DBHelper.AddParameter(dbCommand, "@aboneNo", aboneNo);
+                        DBHelper.AddParameter(dbCommand, "@AboneNo", aboneNo);
 
                         //Open Connection
                         if (dbConnection.State != ConnectionState.Open)
@@ -92,7 +92,9 @@ namespace DataAccessLayer.Concretes
                                 while (reader.Read())
                                 {
                                     var entity = new Odeme();
-                                    entity.Borc = reader.GetDecimal(1);
+                                    entity.Borc = reader.GetDecimal(0);
+                                    entity.AboneNo = reader.GetInt32(1);
+                                    entity.MusteriID = reader.GetInt32(2);
                                     Odeme = entity;
                                     break;
                                 }
@@ -111,7 +113,7 @@ namespace DataAccessLayer.Concretes
                 throw new Exception("OdemeRepository:AboneNo ile Seçim Hatası", ex);
             }
         }
-        public bool BorcOde(Odeme entity)
+        public bool BorcOde(int AboneNo)
         {
             _rowsAffected = 0;
 
@@ -120,9 +122,9 @@ namespace DataAccessLayer.Concretes
             {
                 var query = new StringBuilder();
                 query.Append("UPDATE [dbo].[tblOdeme] ");
-                query.Append("SET [Borc]=@Borc");
+                query.Append("SET [Borc]=@Borc ");
                 query.Append("WHERE ");
-                query.Append(" [AboneNo] = @AboneNo ");
+                query.Append("[AboneNo] = @AboneNo ");
 
 
                 var commandText = query.ToString();
@@ -143,7 +145,7 @@ namespace DataAccessLayer.Concretes
                         dbCommand.Connection = dbConnection;
                         dbCommand.CommandText = commandText;
 
-                        DBHelper.AddParameter(dbCommand, "@AboneNo", entity.AboneNo);
+                        DBHelper.AddParameter(dbCommand, "@AboneNo", AboneNo);
 
                         //Input Params
 

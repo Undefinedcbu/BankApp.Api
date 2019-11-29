@@ -9,7 +9,7 @@ namespace Models.Concretes
    public class Odeme
     {
         public int MusteriID { get; set; }
-        public string AboneNo { get; set; }
+        public int AboneNo { get; set; }
         public decimal Borc { get; set; }
     }
 }

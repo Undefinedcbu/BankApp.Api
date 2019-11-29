@@ -11,6 +11,6 @@ namespace Models.Concretes
         public decimal Bakiye { get; set; }
         public int EkNo { get; set; }
         public string HesapNo { get; set; }
-        public bool Durum { get; set; }
+        public string Durum { get; set; }
     }
 }

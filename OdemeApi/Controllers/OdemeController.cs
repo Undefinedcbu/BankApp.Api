@@ -30,9 +30,8 @@ namespace OdemeApi.Controllers
         public IHttpActionResult Post(string AboneNo)
         {
             var Odeme = business.BorcOde(AboneNo);
-            if (Odeme == null)
+            if (Odeme)
                 return NotFound();
-
             return Ok(Odeme);
         }
 

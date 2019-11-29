@@ -19,15 +19,17 @@ namespace Business.Concretes
 
         }
 
-        public Hesap HesapDurumGuncelle(int hesapId,bool durum)
+        public Hesap HesapDurumGuncelle(int HesapID,string durum)
         {
             try
             {
                 using(var repo= new HesapRepository())
                 {
-                    Hesap h = repo.IdSec(hesapId);
-                    if (repo.hesapIdGuncelle(h, durum))
-                        return h;
+                    if (repo.hesapIdGuncelle(HesapID, durum))
+                    {
+                        return repo.IdSec(HesapID);
+                    }
+                       
                 }
                 return null;
             }
@@ -37,10 +39,10 @@ namespace Business.Concretes
             }
         }
 
-        public Hesap HesapEkle(Hesap entity,int MusteriID)
+        public Hesap HesapEkle(Hesap entity,int MusteriID,int ek)
         {
-
-            string hesap = MusteriID.ToString() + "00";
+            
+            string hesap = MusteriID.ToString() + "00" + ek.ToString();
             try
             {
                 using (var repo = new HesapRepository())
@@ -107,6 +109,20 @@ namespace Business.Concretes
                 throw new Exception("HesapBusiness:HesapRepository:Seçme Hatası", ex);
             }
         }
+        public IList<Hesap> tumHesaplar()
+        {
+            using (var repo = new HesapRepository())
+            {
+                return repo.TumHesaplar();
+            }
+        }
+        public IList<Hesap> hepsiniSec(int MusteriID)
+        {
+            using(var repo = new HesapRepository())
+            {
+                return repo.HepsiniSec(MusteriID);
+            }
+        }
 
         public bool Transfer(string GonderenHesapNo, string AlanHesapNo, decimal Miktar)
         {
@@ -120,8 +136,9 @@ namespace Business.Concretes
                     if (GonderenHesap.Bakiye >= Miktar)
                     {
                         AlanHesap = repo.HesapNoSec(AlanHesapNo);
-                        repo.HesapBakiyeGuncelle(GonderenHesap, GonderenHesap.Bakiye - Miktar);
-                        repo.HesapBakiyeGuncelle(AlanHesap, AlanHesap.Bakiye + Miktar);
+
+                        repo.HesapNoBakiyeGuncelle(GonderenHesapNo, GonderenHesap.Bakiye - Miktar);
+                        repo.HesapNoBakiyeGuncelle(AlanHesapNo, AlanHesap.Bakiye + Miktar);
                         return true;
                     }
                     return false;

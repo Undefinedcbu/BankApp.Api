@@ -18,7 +18,7 @@ namespace Business.Concretes
         {
 
         }
-        public Odeme AboneNoSec(string AboneNo)
+        public Odeme AboneNoSec(int AboneNo)
         {
             try
             {
@@ -32,10 +32,10 @@ namespace Business.Concretes
             }
             catch (Exception ex)
             {
-                throw new Exception("OdemeBusiness:OdemeRepository:Seçme Hatası", ex);
+                throw new Exception("OdemeBusiness:OdemeBusiness:Seçme Hatası", ex);
             }
         }
-        public bool BorcOde(string AboneNo)
+        public bool BorcOde(int AboneNo,string HesapNo)
         {
             var repo2 = new HesapRepository();
             try
@@ -44,14 +44,16 @@ namespace Business.Concretes
                 {
                     
                     Odeme o = repo.AboneNoSec(AboneNo);
-                    Hesap h = repo2.MusterIDSec(o.MusteriID);
-
-                    if (o.Borc>0&&o.Borc<=h.Bakiye)
+                    Hesap h = repo2.HesapNoSec(HesapNo);
+                    var bakiye = h.Bakiye;
+                    var borc = o.Borc;
+                    if (borc>0&&borc<= bakiye)
                     {
-                        h.Bakiye = h.Bakiye - o.Borc;
-                        o.Borc = 0;
-                        repo.BorcOde(o);
-                        repo2.HesapBakiyeGuncelle(h, h.Bakiye);
+                        bakiye -= borc;
+                        borc = 0;
+                        repo2.HesapBakiyeGuncelle(h.HesapID, bakiye);
+                        repo.BorcOde(AboneNo);
+                        
                         return true;
                     }
                 }

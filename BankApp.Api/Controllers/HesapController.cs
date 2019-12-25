@@ -5,10 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using Models.Concretes;
+using System.Web.Http.Cors;
 
 namespace BankApp.Api.Controllers
 {
-   // [Authorize]
+     [Authorize]
+    [EnableCors("*", "*", "*")]
     [RoutePrefix("api/Hesap")]
     public class HesapController : ApiController
     {
@@ -33,7 +35,7 @@ namespace BankApp.Api.Controllers
           
             return Ok(business.Transfer(GonderenNo, AliciNo, Miktar));
         }
-        [Authorize]
+        [AllowAnonymous]
         [Route("")]
         public IHttpActionResult Get()
         {
@@ -53,7 +55,6 @@ namespace BankApp.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [Route("Liste")]
         public IHttpActionResult Getir(int id)
         {

@@ -10,6 +10,7 @@ using System.Web.Http.Cors;
 namespace BankApp.Api.Controllers
 {
     [EnableCors("*", "*", "*")]
+    [Authorize]
     public class OdemeController : ApiController
     {
         OdemeBusiness business = new OdemeBusiness();

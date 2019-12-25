@@ -16,6 +16,7 @@ namespace Models.Concretes
         public string Email { get; set; }
         public string Parola { get; set; }
         public Guid Anahtar { get; set; }
+        public List<Hesap> Hesaplar { get; set; }
     }
 }
 

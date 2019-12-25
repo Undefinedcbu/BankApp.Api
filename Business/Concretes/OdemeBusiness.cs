@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Business.Concretes
 {
+
     public class OdemeBusiness : IDisposable
     {
         public void Dispose()

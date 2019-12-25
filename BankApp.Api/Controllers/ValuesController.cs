@@ -10,6 +10,7 @@ namespace BankApp.Api.Controllers
 
     public class ValuesController : ApiController
     {
+        [Authorize]
         // GET api/values
         public IEnumerable<string> Get()
         {

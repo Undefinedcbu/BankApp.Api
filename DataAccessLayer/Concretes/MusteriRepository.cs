@@ -332,7 +332,7 @@ namespace BankApp.Concretes
                 query.Append("[MusteriID],[TCKimlik],[Ad] ,[Soyad],[DogumTarihi],[Adres],[Telefon],[Email],[Parola],[Anahtar]");
                 query.Append("FROM [dbo].[tblMusteri] ");
                 query.Append("WHERE ");
-                query.Append("[MusteriID] = @id ");
+                query.Append("[TCKimlik] = @id ");
 
 
                 var commandText = query.ToString();

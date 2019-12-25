@@ -8,6 +8,8 @@ using Models.Concretes;
 
 namespace BankApp.Api.Controllers
 {
+   // [Authorize]
+    [RoutePrefix("api/Hesap")]
     public class HesapController : ApiController
     {
         HesapBusiness business = new HesapBusiness();
@@ -17,7 +19,7 @@ namespace BankApp.Api.Controllers
 
         }
 
-        [Route("api/Hesap/Havale")]
+        [Route("Havale")]
         public IHttpActionResult PutHavale(string GonderenNo, string AliciNo, decimal Miktar)
         {
 
@@ -25,14 +27,14 @@ namespace BankApp.Api.Controllers
 
         }
 
-        [Route("api/Hesap/Virman")]
+        [Route("Virman")]
         public IHttpActionResult PutVirman(string GonderenNo,string AliciNo,decimal Miktar)
         {
           
             return Ok(business.Transfer(GonderenNo, AliciNo, Miktar));
         }
-
-        [Route("api/Hesap/")]
+        [Authorize]
+        [Route("")]
         public IHttpActionResult Get()
         {
             var hesaplar = business.tumHesaplar();
@@ -41,7 +43,7 @@ namespace BankApp.Api.Controllers
             return Ok(hesaplar);
         }
 
-        [Route("api/Hesap/")]
+        [Route("")]
         public IHttpActionResult Get(int id)
         {
             var Hesap = business.HesapIdSec(id);
@@ -51,8 +53,8 @@ namespace BankApp.Api.Controllers
         }
 
         [HttpGet]
-        [Route("api/Hesap/Liste")]
-
+        [Authorize]
+        [Route("Liste")]
         public IHttpActionResult Getir(int id)
         {
             var hesaplar = business.hepsiniSec(id);
@@ -61,7 +63,7 @@ namespace BankApp.Api.Controllers
         
         // GET: api/Hesap/5
         [HttpGet]
-        [Route("api/Hesap/Musteri")]
+        [Route("Musteri")]
         public IHttpActionResult Goruntule(int id)
         {
             var Hesap = business.HesapGoruntule(id);
@@ -72,7 +74,7 @@ namespace BankApp.Api.Controllers
 
         // POST: api/Hesap
         [HttpPost]
-        [Route("api/Hesap")]
+        [Route("")]
         public IHttpActionResult Ekle(int id,int ek)
         {
             Hesap hesap = new Hesap();
@@ -89,7 +91,7 @@ namespace BankApp.Api.Controllers
 
         // PUT: api/Hesap/5
         [HttpPut]
-        [Route("api/Hesap/Kapat")]
+        [Route("Kapat")]
         public IHttpActionResult Kapat(int id)
         {
             var Hesap = business.HesapDurumGuncelle(id, "Kapalı");

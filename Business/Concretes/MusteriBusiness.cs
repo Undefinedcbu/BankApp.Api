@@ -1,6 +1,7 @@
 ﻿using BankApp.Concretes;
 using Models.Concretes;
 using System;
+using System.Collections.Generic;
 
 namespace Business
 {
@@ -13,6 +14,23 @@ namespace Business
         public MusteriBusiness()
         {
 
+        }
+        public IList<Musteri> TumMusteriler()
+        {
+            IList<Musteri> musteriler;
+
+            try
+            {
+                using (var repo = new MusteriRepository())
+                {
+                    musteriler = repo.HepsiniSec();
+                }
+                return musteriler;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public Musteri Giris(string TCKimlik, string parola)
         {
@@ -47,6 +65,40 @@ namespace Business
             catch (Exception ex)
             {
                 throw new Exception("MusteriBusiness:MusteriRepository:MusteriAdi Seçme Hatası", ex);
+            }
+        }
+        public Musteri MusteriTCSec(string TCKimlik)
+        {
+            try
+            {
+                Musteri responseEntitiy = null;
+                using (var repo = new MusteriRepository())
+                {
+                    responseEntitiy = repo.TCSec(TCKimlik);
+
+                }
+                return responseEntitiy;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("MusteriBusiness:MusteriRepository:Seçme Hatası", ex);
+            }
+        }
+        public Musteri MusteriIdSec(int MusteriId)
+        {
+            try
+            {
+                Musteri responseEntitiy = null;
+                using (var repo = new MusteriRepository())
+                {
+                    responseEntitiy = repo.IdSec(MusteriId);
+
+                }
+                return responseEntitiy;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("MusteriBusiness:MusteriRepository:Seçme Hatası", ex);
             }
         }
 
@@ -120,26 +172,10 @@ namespace Business
             }
         }
 
-        public Musteri MusteriIdSec(int MusteriId)
-        {
-            try
-            {
-                Musteri responseEntitiy = null;
-                using (var repo = new MusteriRepository())
-                {
-                    responseEntitiy = repo.IdSec(MusteriId);
-
-                }
-                return responseEntitiy;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("MusteriBusiness:MusteriRepository:Seçme Hatası", ex);
-            }
-        }
+        
 
 
 
-      
+
     }
 }
